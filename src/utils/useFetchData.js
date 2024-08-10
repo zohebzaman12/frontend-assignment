@@ -1,3 +1,4 @@
+// useFetchData.js
 import { useState, useEffect } from "react";
 
 const useFetchData = (currency = "usd") => {
@@ -8,12 +9,14 @@ const useFetchData = (currency = "usd") => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // useEffect to fetch data when currency changes
   useEffect(() => {
     setLoading(true);
     setError(null);
     fetchData().finally(() => setLoading(false));
   }, [currency]);
 
+  // Function to fetch data from the API
   const fetchData = async (timeFrame = "1d") => {
     const daysMapping = {
       "1d": 1,
@@ -38,6 +41,7 @@ const useFetchData = (currency = "usd") => {
 
       const result = await response.json();
 
+      // Format data for chart rendering
       const formattedData = result.prices.map((price, index) => {
         return {
           time: new Date(price[0]).toLocaleDateString(),

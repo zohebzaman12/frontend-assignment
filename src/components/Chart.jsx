@@ -17,6 +17,8 @@ import ChartButtons from "./ChartButtons";
 import TimeFrameButtons from "./TimeFrameButtons";
 
 const Chart = ({ fetchData, data, currentPrice }) => {
+
+  //state variables
   const handle = useFullScreenHandle();
   const [timeFrame, setTimeFrame] = useState("1d");
   const [activeData, setActiveData] = useState(null);
@@ -24,11 +26,13 @@ const Chart = ({ fetchData, data, currentPrice }) => {
   const [isFull, setIsFull] = useState(false);
   const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.7);
 
+  // Fetch data when timeFrame changes
   useEffect(() => {
     setLoading(true);
     fetchData(timeFrame).then(() => setLoading(false));
   }, [timeFrame]);
 
+  // Update chart height on window resize or fullscreen change
   useEffect(() => {
     const updateChartHeight = () => {
       setChartHeight(calculateChartHeight());
@@ -39,7 +43,7 @@ const Chart = ({ fetchData, data, currentPrice }) => {
     return () => window.removeEventListener("resize", updateChartHeight);
   }, [isFull]);
 
-
+  // Function to calculate chart height based on screen size and fullscreen mode
   const calculateChartHeight = () => {
     const screenHeight = window.visualViewport
       ? window.visualViewport.height
@@ -64,6 +68,7 @@ const Chart = ({ fetchData, data, currentPrice }) => {
     }
   };
 
+   // Handle mouse movement on the chart to update active data point
   const handleMouseMove = (state) => {
     if (state.isTooltipActive) {
       const { activePayload } = state;
@@ -76,6 +81,7 @@ const Chart = ({ fetchData, data, currentPrice }) => {
     }
   };
 
+ // Custom label for the current price
   const CustomLabel = ({ viewBox }) => {
     const { y, width } = viewBox;
     const chartWidth = width || 0;
@@ -90,6 +96,7 @@ const Chart = ({ fetchData, data, currentPrice }) => {
     );
   };
 
+// Custom label for the active data point
   const CustomLabelBlack = ({ viewBox }) => {
     const { y, width } = viewBox;
     const chartWidth = width || 0;

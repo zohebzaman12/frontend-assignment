@@ -1,3 +1,4 @@
+// Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import Chart from "./Chart.jsx";
 import Summary from "./Summary.jsx";
@@ -11,6 +12,10 @@ import ErrorElement from "./ErrorElement.jsx";
 
 const Dashboard = () => {
   const [activeItem, setActiveItem] = useState("Chart");
+  const [currency, setCurrency] = useState("usd");
+  const [currencySign, setCurrencySign] = useState("$");
+
+  // Custom hook to fetch data
   const {
     data,
     currentPrice,
@@ -21,9 +26,8 @@ const Dashboard = () => {
     setLoading,
     fetchData,
   } = useFetchData();
-  const [currency, setCurrency] = useState("usd");
-  const [currencySign, setCurrencySign] = useState("$");
 
+  // useEffect to handle currency change
   useEffect(() => {
     switch (currency) {
       case "usd":
@@ -42,8 +46,7 @@ const Dashboard = () => {
     fetchData().finally(() => setLoading(false));
   }, [currency]);
 
-
-
+  // Function to render the selected component
   const renderComponent = () => {
     if (error && activeItem === 'Chart') {
       return <ErrorElement error={error}/>;
@@ -73,7 +76,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-10">
-      {/* Price and Change Section */}
+      {/* Price Section */}
       <PriceSection
         loading={loading}
         currentPrice={currentPrice}
