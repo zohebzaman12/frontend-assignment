@@ -25,3 +25,8 @@ This project is a responsive and dynamic crypto dashboard built using **React** 
 
 Check out the live version of the application hosted at https://catalog-frontend-assignment.netlify.app/
 
+## Screenshots
+
+[![screenshot.png](https://i.postimg.cc/MGBFxhxG/screenshot.png)](https://postimg.cc/cKsmBkvq)
+
+
