@@ -29,7 +29,10 @@ export default {
         'green': '#67BF6B',
         'neutral-gray': '#BDBEBF',
         'very-light-gray': '#EFF1F3',
-        'red' : '#D90D1E'
+        'red' : '#D90D1E',
+        'red-800':'#991b1b',
+        'red-50' : '#fef2f2',
+
       },
       textUnderlineOffset: {
         20: '20px',

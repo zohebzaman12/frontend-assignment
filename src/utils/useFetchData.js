@@ -6,9 +6,11 @@ const useFetchData = (currency = "usd") => {
   const [percentageChange, setPercentageChange] = useState(0);
   const [priceChange, setPriceChange] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
     fetchData().finally(() => setLoading(false));
   }, [currency]);
 
@@ -20,36 +22,55 @@ const useFetchData = (currency = "usd") => {
       "1m": 30,
       "6m": 180,
       "1y": 365,
-      "max": "365",
+      max: "365",
     };
 
     const days = daysMapping[timeFrame] || 1;
 
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${currency}&days=${days}`
-    );
-    const result = await response.json();
+    try {
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${currency}&days=${days}`
+      );
 
-    const formattedData = result.prices.map((price, index) => {
-      return {
-        time: new Date(price[0]).toLocaleDateString(),
-        price: Math.round(price[1] * 100) / 100,
-        volume: result.total_volumes[index][1],
-      };
-    });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
 
-    const startPrice = formattedData[0].price;
-    const endPrice = formattedData[formattedData.length - 1].price;
-    const percentageChange = ((endPrice - startPrice) / startPrice) * 100;
-    const priceChange = endPrice - startPrice;
+      const result = await response.json();
 
-    setData(formattedData);
-    setCurrentPrice(endPrice);
-    setPercentageChange(Math.round(percentageChange * 100) / 100);
-    setPriceChange(Math.round(priceChange * 100) / 100);
+      const formattedData = result.prices.map((price, index) => {
+        return {
+          time: new Date(price[0]).toLocaleDateString(),
+          price: Math.round(price[1] * 100) / 100,
+          volume: result.total_volumes[index][1],
+        };
+      });
+
+      const startPrice = formattedData[0].price;
+      const endPrice = formattedData[formattedData.length - 1].price;
+      const percentageChange = ((endPrice - startPrice) / startPrice) * 100;
+      const priceChange = endPrice - startPrice;
+
+      setData(formattedData);
+      setCurrentPrice(endPrice);
+      setPercentageChange(Math.round(percentageChange * 100) / 100);
+      setPriceChange(Math.round(priceChange * 100) / 100);
+    } catch (err) {
+      console.error("Failed to fetch data:", err);
+      setError(err.message || "An error occurred while fetching data.");
+    }
   };
 
-  return { data, currentPrice, percentageChange, priceChange, loading, fetchData ,setLoading,setData,setCurrentPrice,setPercentageChange,setPriceChange};
+  return {
+    data,
+    currentPrice,
+    percentageChange,
+    priceChange,
+    loading,
+    error,
+    fetchData,
+    setLoading,
+  };
 };
 
 export default useFetchData;

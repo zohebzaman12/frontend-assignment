@@ -39,7 +39,6 @@ const Chart = ({ fetchData, data, currentPrice }) => {
     return () => window.removeEventListener("resize", updateChartHeight);
   }, [isFull]);
 
-  console.log(chartHeight);
 
   const calculateChartHeight = () => {
     const screenHeight = window.visualViewport
@@ -115,7 +114,7 @@ const Chart = ({ fetchData, data, currentPrice }) => {
         );
       }}
     >
-      <div className={`${isFull ? "p-8" : ""}`}>
+      <div className='m-4'>
         <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center md:justify-center lg:justify-between items-center mb-4 gap-4 sm:gap-0">
           <ChartButtons
             handle={handle}
