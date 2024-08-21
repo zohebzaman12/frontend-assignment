@@ -1,5 +1,6 @@
 // useFetchData.js
 import { useState, useEffect } from "react";
+const apiKey = import.meta.env.VITE_COINGECKO_API_KEY;
 
 const useFetchData = (currency = "usd") => {
   const [data, setData] = useState([]);
@@ -8,6 +9,7 @@ const useFetchData = (currency = "usd") => {
   const [priceChange, setPriceChange] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
 
   // useEffect to fetch data when currency changes
   useEffect(() => {
@@ -32,7 +34,7 @@ const useFetchData = (currency = "usd") => {
 
     try {
       const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${currency}&days=${days}`
+        `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${currency}&days=${days}&x_cg_demo_api_key=${apiKey}`
       );
 
       if (!response.ok) {
